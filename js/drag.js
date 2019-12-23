@@ -16,16 +16,21 @@ function tree(element, data = {}, options = {}) {
     const svgBox = $(document.createElementNS("http://www.w3.org/2000/svg", "svg"))
         .attr("width", $(element).outerWidth())
         .attr("height", $(element).outerHeight())
-        .css({
-            "display": "block"
-        })
         .appendTo(element);
 
-    $(document.createElementNS("http://www.w3.org/2000/svg", "defs"))
-        .html('<linearGradient id="grad1">\n' +
-            '            <stop offset="0%" stop-color="red"/>\n' +
-            '            <stop offset="100%" stop-color="red" stop-opacity="0" />\n' +
-            '        </linearGradient>')
+    const lineBox = $(document.createElementNS("http://www.w3.org/2000/svg", "g"))
+        .attr("width", $(element).outerWidth())
+        .attr("height", $(element).outerHeight())
+        .appendTo(svgBox);
+
+    const iconBox = $(document.createElementNS("http://www.w3.org/2000/svg", "g"))
+        .attr("width", $(element).outerWidth())
+        .attr("height", $(element).outerHeight())
+        .appendTo(svgBox);
+
+    const textBox = $(document.createElementNS("http://www.w3.org/2000/svg", "g"))
+        .attr("width", $(element).outerWidth())
+        .attr("height", $(element).outerHeight())
         .appendTo(svgBox);
 
     data.forEach((dataPoint) => {
@@ -55,7 +60,7 @@ function tree(element, data = {}, options = {}) {
             .attr("cx", x)
             .attr("cy", y)
             .addClass("draggable")
-            .appendTo(svgBox);
+            .appendTo(iconBox);
 
         const t = $(document.createElementNS("http://www.w3.org/2000/svg", "text"))
             .attr("r", 10)
@@ -63,7 +68,7 @@ function tree(element, data = {}, options = {}) {
             .attr("y", y + (r / 2))
             .addClass("draggable")
             .text(dataPoint.text)
-            .appendTo(svgBox);
+            .appendTo(textBox);
     });
 
     Object.keys(elements).forEach(function (key) {
@@ -89,8 +94,8 @@ function tree(element, data = {}, options = {}) {
             $(document.createElementNS("http://www.w3.org/2000/svg", "path"))
                 .attr("d", `M ${x1} ${y1} L ${x2} ${y2}`)
                 .attr("fill", "none")
-                .attr("stroke", "url(#grad1)")
-                .appendTo(svgBox);
+                .attr("stroke", "var(--primary)")
+                .appendTo(lineBox);
         })
     });
 
@@ -98,9 +103,9 @@ function tree(element, data = {}, options = {}) {
 }
 
 tree(element, [
-    {"key": "test1", "text": "test 1", targets: ["test3", "test5"]},
+    {"key": "test1", "text": "test 1", targets: ["test3", "test5", "test4"]},
     {"key": "test2", "text": "test 2", targets: ["test3"]},
     {"key": "test3", "text": "test 3"},
-    {"key": "test4", "text": "test 4"},
+    {"key": "test4", "text": "test 4", targets: ["test5"]},
     {"key": "test5", "text": "test 5"}
 ], {});
